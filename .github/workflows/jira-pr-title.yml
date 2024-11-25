@@ -10,12 +10,20 @@ jobs:
       uses: actions/github-script@v7
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
+        retries: 3
         script: |
-          const { data } = await github.request("GET /repos/{owner}/{repo}/pulls/{pr}", {
-            owner: context.repo.owner,
-            repo: context.repo.repo,
-            pr: context.payload.pull_request.number
-          });
+          try {
+            const { data } = await github.request('GET /repos/{owner}/{repo}/pulls/{pr}', {
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              pr: context.payload.pull_request.number
+            });
+          } catch (error) {
+            const result = await github.request('https://icanhazip.com')
+            console.log('IP Address: ', result)
+
+            throw error;
+          }
 
           const prTitle = data.title
 
