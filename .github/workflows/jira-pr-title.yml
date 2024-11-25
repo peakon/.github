@@ -12,15 +12,19 @@ jobs:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         retries: 3
         script: |
+          let data;
+
           try {
-            const { data } = await github.request('GET /repos/{owner}/{repo}/pulls/{pr}', {
+            const result = await github.request('GET /repos/{owner}/{repo}/pulls/{pr}', {
               owner: context.repo.owner,
               repo: context.repo.repo,
               pr: context.payload.pull_request.number
             });
+
+            data = result.data;
           } catch (error) {
-            const result = await github.request('https://icanhazip.com')
-            console.log('IP Address: ', result)
+            const ip = await github.request('https://icanhazip.com')
+            console.log('IP Address: ', ip)
 
             throw error;
           }
