@@ -1,7 +1,7 @@
 name: "Jira PR Title Check"
 on:
   pull_request:
-    types: [opened, reopened, synchronize]
+    types: [opened, reopened, synchronize, edited]
 jobs:
   check-title:
     runs-on: arc-runner-set
