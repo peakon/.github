@@ -5,7 +5,7 @@ on:
   workflow_dispatch:
 jobs:
   check-title:
-    runs-on: arc-runner-set
+    runs-on: ubuntu-latest
     steps:
       - name: Check PR title
         uses: actions/github-script@v7
@@ -31,8 +31,27 @@ jobs:
             }
 
             const prTitle = data.title
-
             const jiraPattern = /[A-Z]+-\d+/g
-            if (!jiraPattern.test(prTitle)) {
+
+            if (prTitle.includes('[Snyk]')) {
+              # label the PR with 'security'
+              const labels = ['security']
+              await github.rest.issues.addLabels({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: data.number,
+                labels
+              })
+              if (!jiraPattern.test(prTitle)) {
+                # add prefix '[PEAKON-2516]' to PR title
+                const newTitle = '[PEAKON-2516] ' + prTitle
+                await github.rest.pulls.update({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  pull_number: data.number,
+                  title: newTitle
+                })
+              }  
+            } else if (!jiraPattern.test(prTitle)) {
               core.setFailed('Cannot find a JIRA ticket in the PR title')
             }
