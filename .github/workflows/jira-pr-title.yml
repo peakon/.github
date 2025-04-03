@@ -36,19 +36,21 @@ jobs:
 
              if (prTitle.includes('[Snyk]')) {
                # label the PR with 'security'
+               console.log('Labeling PR with security')
                const labels = ['security']
                await github.rest.issues.addLabels({
-                 owner: context.repo.owner,
-                 repo: context.repo.repo,
+                 owner: 'peakon', // context.repo.owner,
+                 repo: '.github', // context.repo.repo,
                  issue_number: data.number,
                  labels
                })
                if (!jiraPattern.test(prTitle)) {
+                 console.log('JIRA ticket not found in PR title')
                  # add prefix '[PEAKON-2516]' to PR title
                  const newTitle = '[PEAKON-2516] ' + prTitle
                  await github.rest.pulls.update({
-                   owner: context.repo.owner,
-                   repo: context.repo.repo,
+                   owner: 'peakon', // context.repo.owner,
+                   repo: '.github', // context.repo.repo,
                    pull_number: data.number,
                    title: newTitle
                  })
