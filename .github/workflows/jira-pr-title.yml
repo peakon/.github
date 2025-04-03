@@ -16,7 +16,7 @@ jobs:
             let data;
 
             try {
-              const result = await github.request('GET /repos/{owner}/{repo}/pulls/{pr}', {
+              const result = await github.rest.pulls.get({
                 owner: 'peakon',
                 repo: '.github',
                 pr: 15
@@ -39,7 +39,7 @@ jobs:
                console.log('PR title contains [Snyk]')
                console.log('1. Labeling PR with `security`')
                const labels = ['security']
-               await github.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
+               await github.rest.issues.addLabels({
                  owner: 'peakon', // context.repo.owner,
                  repo: '.github', // context.repo.repo,
                  issue_number: data.number,
