@@ -28,7 +28,7 @@ on:
         default: "arc-runner-set"
 jobs:
   check-title:
-    runs-on: ${{ github.event.inputs.runner || 'arc-runner-set' }}
+    runs-on: ${{ github.event.inputs && github.event.inputs.runner || 'arc-runner-set' }}
     steps:
       - name: Check PR title
         uses: actions/github-script@v7
