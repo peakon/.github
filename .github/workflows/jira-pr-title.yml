@@ -16,10 +16,10 @@ jobs:
             let data;
 
             try {
-              const result = await github.request('GET /repos/peakon/.github/pulls/15', {
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                pr: context.payload.pull_request.number
+              const result = await github.request('GET /repos/{owner}/{repo}/pulls/{pr}', {
+                owner: 'peakon',
+                repo: '.github',
+                pr: 15
               });
 
               data = result.data;
