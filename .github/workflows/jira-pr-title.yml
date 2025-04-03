@@ -20,41 +20,41 @@ jobs:
                 owner: 'peakon', //context.repo.owner,
                 repo: '.github', //context.repo.repo,
                 pull_number: 15 //context.issue.number
-              })
+              });
 
               data = result.data;
             } catch (error) {
-              const ip = await github.request('https://icanhazip.com')
-              console.log('IP Address: ', ip)
+              const ip = await github.request('https://icanhazip.com');
+              console.log('IP Address: ', ip);
 
               throw error;
             }
 
-            const prTitle = data.title
+            const prTitle = data.title;
 
-            const jiraPattern = /[A-Z]+-\d+/g
+            const jiraPattern = /[A-Z]+-\d+/g;
 
 
             if (prTitle.includes('[Snyk]')) {
-               console.log('PR title contains [Snyk]')
-               console.log('1. Labeling PR with `security`')
-               const labels = ['security']
+               console.log('PR title contains [Snyk]');
+               console.log('1. Labeling PR with `depdependencies` and `security`');
+               const labels = ['depdependencies', 'security'];
                await github.rest.issues.addLabels({
                  owner: 'peakon', // context.repo.owner,
                  repo: '.github', // context.repo.repo,
                  issue_number: data.number,
                  labels
-               })
+               });
                if (!jiraPattern.test(prTitle)) {
-                 console.log('2. Adding `[PEAKON-2516]` prefix to PR title')
-                 const newTitle = '[PEAKON-2516] ' + prTitle
+                 console.log('2. Adding `[PEAKON-2516]` prefix to PR title');
+                 const newTitle = `[PEAKON-2516] ${prTitle}`;
                  await github.rest.pulls.update({
                    owner: 'peakon', // context.repo.owner,
                    repo: '.github', // context.repo.repo,
                    pull_number: data.number,
                    title: newTitle
-                 })
+                 });
                }
              } else if (!jiraPattern.test(prTitle)) {
-               core.setFailed('Cannot find a JIRA ticket in the PR title')
+               core.setFailed('Cannot find a JIRA ticket in the PR title');
              }
