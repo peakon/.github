@@ -60,7 +60,7 @@ jobs:
 
             if (prTitle.includes('[Snyk]')) {
               console.log('PR title contains [Snyk]');
-              console.log('1. Labeling PR with `depdependencies` and `security`');
+              console.log('1. Labeling PR with `dependencies` and `security`');
               const issue_number = data.number;
               const labels = ['dependencies', 'security'];
               await github.rest.issues.addLabels({owner, repo, issue_number, labels});
