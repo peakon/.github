@@ -67,7 +67,7 @@ jobs:
               if (!jiraPattern.test(prTitle)) {
                 console.log('2. Adding `[PEAKON-2516]` prefix to PR title');
                 const title = `[PEAKON-2516] ${prTitle}`;
-                await github.rest.pulls.update({owener, repo, pull_number, title});
+                await github.rest.pulls.update({owner, repo, pull_number, title});
               }
              } else if (!jiraPattern.test(prTitle)) {
               core.setFailed('Cannot find a JIRA ticket in the PR title');
