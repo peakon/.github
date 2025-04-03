@@ -17,10 +17,10 @@ jobs:
 
             try {
               const result = await github.rest.pulls.get({
-                owner: 'peakon',
-                repo: '.github',
-                pr: 15
-              });
+                owner: 'peakon', //context.repo.owner,
+                repo: '.github', //context.repo.repo,
+                pull_number: 15 //context.issue.number
+              })
 
               data = result.data;
             } catch (error) {
