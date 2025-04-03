@@ -36,7 +36,7 @@ jobs:
 
 
             if (prTitle.includes('[Snyk]')) {
-               # label the PR with 'security'
+               // label the PR with 'security'
                console.log('Labeling PR with security')
                const labels = ['security']
                await github.request('POST /repos/{owner}/{repo}/issues/{issue_number}/labels', {
@@ -47,7 +47,7 @@ jobs:
                })
                /*if (!jiraPattern.test(prTitle)) {
                  console.log('JIRA ticket not found in PR title')
-                 # add prefix '[PEAKON-2516]' to PR title
+                 // add prefix '[PEAKON-2516]' to PR title
                  const newTitle = '[PEAKON-2516] ' + prTitle
                  await github.rest.pulls.update({
                    owner: 'peakon', // context.repo.owner,
