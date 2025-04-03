@@ -2,36 +2,37 @@ name: "Jira PR Title Check"
 on:
   pull_request:
     types: [opened, reopened, synchronize]
+  workflow_dispatch:
 jobs:
   check-title:
     runs-on: arc-runner-set
     steps:
-    - name: Check PR title
-      uses: actions/github-script@v7
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        retries: 3
-        script: |
-          let data;
+      - name: Check PR title
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          retries: 3
+          script: |
+            let data;
 
-          try {
-            const result = await github.request('GET /repos/{owner}/{repo}/pulls/{pr}', {
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              pr: context.payload.pull_request.number
-            });
+            try {
+              const result = await github.request('GET /repos/{owner}/{repo}/pulls/{pr}', {
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                pr: context.payload.pull_request.number
+              });
 
-            data = result.data;
-          } catch (error) {
-            const ip = await github.request('https://icanhazip.com')
-            console.log('IP Address: ', ip)
+              data = result.data;
+            } catch (error) {
+              const ip = await github.request('https://icanhazip.com')
+              console.log('IP Address: ', ip)
 
-            throw error;
-          }
+              throw error;
+            }
 
-          const prTitle = data.title
+            const prTitle = data.title
 
-          const jiraPattern = /[A-Z]+-\d+/g
-          if (!jiraPattern.test(prTitle)) {
-            core.setFailed('Cannot find a JIRA ticket in the PR title')
-          }
+            const jiraPattern = /[A-Z]+-\d+/g
+            if (!jiraPattern.test(prTitle)) {
+              core.setFailed('Cannot find a JIRA ticket in the PR title')
+            }
