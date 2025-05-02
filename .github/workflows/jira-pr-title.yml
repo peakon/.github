@@ -69,6 +69,26 @@ jobs:
                 const title = `[PEAKON-2516] ${prTitle}`;
                 await github.rest.pulls.update({owner, repo, pull_number, title});
               }
-             } else if (!jiraPattern.test(prTitle)) {
+            } else if (!jiraPattern.test(prTitle)) {
+              const issue_number = data.number;
+            
+              const body = `
+                It looks like your PR title doesn't include a JIRA ticket.
+                
+                Please add a ticket to the title (e.g. \`PEAKON-1234\`) or comment with one of the following to create one automatically:
+                
+                - \`@peakon-bot create-jira PEAKONADX\`
+                - \`@peakon-bot create-jira PEAKONBETO\`
+                - \`@peakon-bot create-jira PEAKONDEVEX\`
+                - \`@peakon-bot create-jira PEAKONFND\`
+                - \`@peakon-bot create-jira PEAKONIN\`
+                - \`@peakon-bot create-jira PEAKONINLE\`
+                - \`@peakon-bot create-jira PEAKONLIGHT\`
+                - \`@peakon-bot create-jira PEAKONPOW\`
+            `;
+            
+              await github.rest.issues.createComment({ owner, repo, issue_number, body });
+            
               core.setFailed('Cannot find a JIRA ticket in the PR title');
-             }
+            }
+
